@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"regexp"
 	"strconv"
@@ -13,8 +14,8 @@ func main() {
 	inputFile := "input.txt"
 	outputFile := "output.txt"
 
-	// Чтение входного файла
-	data, err := os.ReadFile(inputFile)
+	// Чтение входного файла с использованием ioutil
+	data, err := ioutil.ReadFile(inputFile)
 	if err != nil {
 		panic("Ошибка при открытии входного файла: " + err.Error())
 	}
@@ -22,10 +23,15 @@ func main() {
 	// Компиляция регулярного выражения
 	re := regexp.MustCompile(`^(\d+)([+-/*/])(\d+)=\?$`)
 
-	// Создание/очистка выходного файла
-	f, err := os.OpenFile(outputFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	// Создание/очистка выходного файла с использованием ioutil
+	err = ioutil.WriteFile(outputFile, []byte{}, 0644)
 	if err != nil {
 		panic("Ошибка при создании выходного файла: " + err.Error())
+	}
+
+	f, err := os.OpenFile(outputFile, os.O_WRONLY, 0644)
+	if err != nil {
+		panic("Ошибка при открытии выходного файла: " + err.Error())
 	}
 	defer f.Close()
 
